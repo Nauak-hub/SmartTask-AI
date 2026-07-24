@@ -167,5 +167,5 @@ src/main/resources/static/
 
 Como o front-end consome a própria API REST, não é necessário instalar Node.js, npm ou qualquer framework JavaScript.
 
-Kauan Gutierrez Santos Estácio
+Kauan Gutierrez Santos Estácio - 
 Instituto Federal de Sergipe
