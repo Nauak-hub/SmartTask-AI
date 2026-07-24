@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SmartTask AI - Gerenciador inteligente de tarefas">
+  <title>SmartTask AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">S</div>
+        <div>
+          <strong>SmartTask</strong>
+          <span>AI Workspace</span>
+        </div>
+      </div>
+
+      <nav class="nav-menu" aria-label="Navegação principal">
+        <button class="nav-item active" data-view="dashboard">
+          <span class="nav-icon">▦</span><span>Visão geral</span>
+        </button>
+        <button class="nav-item" data-status-filter="PENDING">
+          <span class="nav-icon">○</span><span>Pendentes</span>
+        </button>
+        <button class="nav-item" data-status-filter="IN_PROGRESS">
+          <span class="nav-icon">◐</span><span>Em andamento</span>
+        </button>
+        <button class="nav-item" data-status-filter="COMPLETED">
+          <span class="nav-icon">✓</span><span>Concluídas</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-card">
+        <span class="sparkle">✦</span>
+        <strong>Assistente inteligente</strong>
+        <p>Descreva o que precisa fazer e deixe a IA organizar por você.</p>
+        <button class="btn btn-soft btn-block" id="sidebarAiButton">Usar assistente</button>
+      </div>
+
+      <div class="sidebar-footer">
+        <a href="/swagger-ui.html" target="_blank" rel="noopener">Documentação da API ↗</a>
+        <span>Projeto acadêmico de POO</span>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button class="icon-button menu-toggle" id="menuToggle" aria-label="Abrir menu">☰</button>
+        <div class="welcome">
+          <span>Organize seu dia</span>
+          <h1>Suas tarefas, com mais clareza.</h1>
+        </div>
+        <div class="topbar-actions">
+          <button class="icon-button" id="themeToggle" aria-label="Alternar tema">☾</button>
+          <button class="btn btn-primary" id="newTaskButton"><span>＋</span> Nova tarefa</button>
+        </div>
+      </header>
+
+      <section class="stats-grid" aria-label="Resumo das tarefas">
+        <article class="stat-card">
+          <div class="stat-icon neutral">≡</div>
+          <div><span>Total de tarefas</span><strong id="totalCount">0</strong></div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-icon warning">○</div>
+          <div><span>Pendentes</span><strong id="pendingCount">0</strong></div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-icon info">◐</div>
+          <div><span>Em andamento</span><strong id="progressCount">0</strong></div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-icon success">✓</div>
+          <div><span>Concluídas</span><strong id="completedCount">0</strong></div>
+        </article>
+      </section>
+
+      <section class="ai-banner">
+        <div class="ai-orb">✦</div>
+        <div class="ai-copy">
+          <span class="eyebrow">SMARTTASK AI</span>
+          <h2>Transforme uma ideia em tarefa organizada</h2>
+          <p>Escreva em linguagem natural. O assistente sugere título, prioridade, categoria, prazo e subtarefas.</p>
+        </div>
+        <div class="ai-input-wrap">
+          <textarea id="quickAiText" rows="2" maxlength="1000" placeholder="Ex.: Preciso terminar o trabalho de POO até sexta, prioridade alta..."></textarea>
+          <button class="btn btn-light" id="quickAiButton">Gerar tarefa ✦</button>
+        </div>
+      </section>
+
+      <section class="tasks-section">
+        <div class="section-header">
+          <div>
+            <span class="eyebrow">MINHA ROTINA</span>
+            <h2>Lista de tarefas</h2>
+          </div>
+          <div class="view-controls">
+            <button class="view-button active" data-layout="grid" aria-label="Visualização em cartões">▦</button>
+            <button class="view-button" data-layout="list" aria-label="Visualização em lista">☷</button>
+          </div>
+        </div>
+
+        <div class="filters-bar">
+          <label class="search-box">
+            <span>⌕</span>
+            <input type="search" id="searchInput" placeholder="Pesquisar tarefa ou categoria...">
+          </label>
+          <select id="statusFilter" aria-label="Filtrar por status">
+            <option value="ALL">Todos os status</option>
+            <option value="PENDING">Pendentes</option>
+            <option value="IN_PROGRESS">Em andamento</option>
+            <option value="COMPLETED">Concluídas</option>
+            <option value="CANCELLED">Canceladas</option>
+          </select>
+          <select id="priorityFilter" aria-label="Filtrar por prioridade">
+            <option value="ALL">Todas as prioridades</option>
+            <option value="URGENT">Urgente</option>
+            <option value="HIGH">Alta</option>
+            <option value="MEDIUM">Média</option>
+            <option value="LOW">Baixa</option>
+          </select>
+          <button class="btn btn-ghost" id="clearFilters">Limpar filtros</button>
+        </div>
+
+        <div class="loading-state" id="loadingState">
+          <div class="spinner"></div>
+          <p>Carregando suas tarefas...</p>
+        </div>
+
+        <div class="empty-state hidden" id="emptyState">
+          <div class="empty-illustration">✓</div>
+          <h3>Nenhuma tarefa encontrada</h3>
+          <p>Crie uma nova tarefa ou ajuste os filtros utilizados.</p>
+          <button class="btn btn-primary" id="emptyNewTask">Criar primeira tarefa</button>
+        </div>
+
+        <div class="tasks-grid hidden" id="tasksContainer"></div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop hidden" id="taskModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-panel">
+      <header class="modal-header">
+        <div>
+          <span class="eyebrow">ORGANIZAÇÃO</span>
+          <h2 id="modalTitle">Nova tarefa</h2>
+        </div>
+        <button class="icon-button" id="closeModal" aria-label="Fechar">×</button>
+      </header>
+
+      <form id="taskForm" novalidate>
+        <input type="hidden" id="taskId">
+        <div class="form-grid">
+          <label class="field field-full">
+            <span>Título *</span>
+            <input id="title" name="title" maxlength="120" required placeholder="O que precisa ser feito?">
+            <small class="field-error" data-error-for="title"></small>
+          </label>
+
+          <label class="field field-full">
+            <span>Descrição</span>
+            <textarea id="description" name="description" rows="4" maxlength="1000" placeholder="Adicione contexto e informações importantes..."></textarea>
+          </label>
+
+          <label class="field">
+            <span>Prioridade</span>
+            <select id="priority" name="priority">
+              <option value="MEDIUM">Média</option>
+              <option value="LOW">Baixa</option>
+              <option value="HIGH">Alta</option>
+              <option value="URGENT">Urgente</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Data de entrega</span>
+            <input id="dueDate" name="dueDate" type="date">
+          </label>
+
+          <label class="field field-full">
+            <span>Categoria</span>
+            <input id="category" name="category" maxlength="60" placeholder="Ex.: Estudos, Trabalho, Pessoal">
+          </label>
+
+          <label class="field field-full">
+            <span>Subtarefas</span>
+            <textarea id="subtasks" name="subtasks" rows="4" placeholder="Uma subtarefa por linha"></textarea>
+            <small>Pressione Enter para separar as etapas.</small>
+          </label>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" id="cancelModal">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="saveTaskButton">Salvar tarefa</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="confirm-backdrop hidden" id="confirmDialog" role="alertdialog" aria-modal="true">
+    <div class="confirm-card">
+      <div class="danger-icon">!</div>
+      <h3>Excluir esta tarefa?</h3>
+      <p>Esta ação é permanente e não poderá ser desfeita.</p>
+      <div class="confirm-actions">
+        <button class="btn btn-ghost" id="cancelDelete">Cancelar</button>
+        <button class="btn btn-danger" id="confirmDelete">Excluir</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+  <script src="/js/app.js" defer></script>
+</body>
+</html>
