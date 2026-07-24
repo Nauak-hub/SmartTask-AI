@@ -167,5 +167,9 @@ src/main/resources/static/
 
 Como o front-end consome a própria API REST, não é necessário instalar Node.js, npm ou qualquer framework JavaScript.
 
+## 📄 Licença
+
+Este projeto está licenciado sob a Licença MIT. Consulte o arquivo `LICENSE` para mais informações.
+
 Kauan Gutierrez Santos Estácio - 
 Instituto Federal de Sergipe
